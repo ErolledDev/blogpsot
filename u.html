@@ -8,16 +8,19 @@
 </head>
 <body>
     <div class="logo">
-        <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTYgMEMyNC44MzcgMCAzMiA3LjE2MyAzMiAxNkMzMiAyNC44MzcgMjQuODM3IDMyIDE2IDMyQzcuMTYzIDMyIDAgMjQuODM3IDAgMTZDMCA3LjE2MyA3LjE2MyAwIDE2IDBaIiBmaWxsPSIjRjM4MDIwIi8+PC9zdmc+" alt="Logo" width="32" height="32">
+      <!--  <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTYgMEMyNC44MzcgMCAzMiA3LjE2MyAzMiAxNkMzMiAyNC44MzcgMjQuODM3IDMyIDE2IDMyQzcuMTYzIDMyIDAgMjQuODM3IDAgMTZDMCA3LjE2MyA3LjE2MyAwIDE2IDBaIiBmaWxsPSIjRjM4MDIwIi8+PC9zdmc+" alt="Logo" width="32" height="32"> -->
     </div>
     <div class="container">
         <div class="verification-box">
-            <div class="domain" id="domainText"></div>
+            <div class="domain">
+                <img id="urlFavicon" width="16" height="16" style="margin-right: 8px;">
+                <span id="domainText"></span>
+            </div>
             <div class="status">
                 <span class="spinner" id="loadingSpinner"></span>
                 Checking if the site connection is secure
             </div>
-                      <div class="captcha-box" id="captchaBox" style="display: none;">
+            <div class="captcha-box" id="captchaBox" style="display: none;">
                 <label class="checkbox-container">
                     <input type="checkbox" id="verifyCheckbox">
                     <span class="checkmark"></span>
@@ -25,7 +28,7 @@
                 </label>
             </div>
             <div class="description">
-                need to review the security of your connection before proceeding.
+                <span id="domainText2"></span> need to review the security of your connection before proceeding.
             </div>
         </div>
     </div>
@@ -43,7 +46,31 @@
         if (targetUrl) {
             try {
                 const url = new URL(targetUrl);
-                document.getElementById('domainText').textContent = url.hostname;
+                const domain = url.hostname;
+                document.getElementById('domainText').textContent = domain;
+                document.getElementById('domainText2').textContent = domain;
+                
+                // Set favicon using the actual website's favicon
+                const favicon = `${url.protocol}//${url.hostname}/favicon.ico`;
+                const faviconImg = document.getElementById('urlFavicon');
+                
+                // Try to load the direct favicon first
+                faviconImg.src = favicon;
+                
+                // If the direct favicon fails, fallback to Google's service
+                faviconImg.onerror = () => {
+                    faviconImg.src = `https://www.google.com/s2/favicons?domain=${domain}`;
+                };
+
+                // Set page favicon
+                const pageFavicon = document.createElement('link');
+                pageFavicon.rel = 'icon';
+                pageFavicon.href = favicon;
+                pageFavicon.onerror = () => {
+                    pageFavicon.href = `https://www.google.com/s2/favicons?domain=${domain}`;
+                };
+                document.head.appendChild(pageFavicon);
+                
             } catch (e) {
                 console.error('Invalid URL');
             }

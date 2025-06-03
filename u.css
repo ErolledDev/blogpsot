@@ -74,8 +74,8 @@ body {
 }
 
 .captcha-box:hover {
-    border-color: #0051c3;
-    background: #f5f8ff;
+    border-color: #e0e0e0;
+   
 }
 
 .checkbox-container {
