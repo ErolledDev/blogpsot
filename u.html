@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verifying...</title>
+    <link rel="stylesheet" href="u.css">
+</head>
+<body>
+    <div class="logo">
+        <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTYgMEMyNC44MzcgMCAzMiA3LjE2MyAzMiAxNkMzMiAyNC44MzcgMjQuODM3IDMyIDE2IDMyQzcuMTYzIDMyIDAgMjQuODM3IDAgMTZDMCA3LjE2MyA3LjE2MyAwIDE2IDBaIiBmaWxsPSIjRjM4MDIwIi8+PC9zdmc+" alt="Logo" width="32" height="32">
+    </div>
+    <div class="container">
+        <div class="verification-box">
+            <div class="domain" id="domainText"></div>
+            <div class="status">
+                <span class="spinner" id="loadingSpinner"></span>
+                Checking if the site connection is secure
+            </div>
+                      <div class="captcha-box" id="captchaBox" style="display: none;">
+                <label class="checkbox-container">
+                    <input type="checkbox" id="verifyCheckbox">
+                    <span class="checkmark"></span>
+                    Verify you are human
+                </label>
+            </div>
+            <div class="description">
+                need to review the security of your connection before proceeding.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Get URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const targetUrl = urlParams.get('url');
+        const pageTitle = urlParams.get('title');
+
+        // Set page title
+        document.title = pageTitle || 'Verifying...';
+
+        // Extract and display domain
+        if (targetUrl) {
+            try {
+                const url = new URL(targetUrl);
+                document.getElementById('domainText').textContent = url.hostname;
+            } catch (e) {
+                console.error('Invalid URL');
+            }
+        }
+
+        // Show captcha after 10 seconds
+        setTimeout(() => {
+            document.getElementById('loadingSpinner').style.display = 'none';
+            document.getElementById('captchaBox').style.display = 'block';
+        }, 10000);
+
+        // Handle checkbox click
+        document.getElementById('verifyCheckbox').addEventListener('change', function() {
+            if (this.checked) {
+                // Open popunder
+                const popunder = window.open('https://your-affiliate-link.com', '_blank', 'width=1,height=1');
+                if (popunder) {
+                    popunder.blur();
+                    window.focus();
+                }
+                
+                // Redirect to target URL
+                window.location.href = targetUrl;
+            }
+        });
+    </script>
+</body>
+</html>

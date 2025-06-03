@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Shortener</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <div class="container">
+        <form id="urlForm" onsubmit="handleSubmit(event)">
+            <h1>URL Shortener</h1>
+            <div class="input-group">
+                <input type="url" id="url" required placeholder="Enter URL">
+            </div>
+            <div class="input-group">
+                <input type="text" id="title" required placeholder="Enter Title">
+            </div>
+            <div class="input-group" id="generatedLinkContainer" style="display: none;">
+                <input type="text" id="generatedLink" readonly>
+                <button type="button" onclick="copyLink()" class="copy-button">Copy Link</button>
+            </div>
+            <button type="submit">Generate Link</button>
+        </form>
+    </div>
+
+    <script>
+        function handleSubmit(e) {
+            e.preventDefault();
+            const url = document.getElementById('url').value;
+            const title = document.getElementById('title').value;
+            const currentUrl = window.location.href.split('/index.html')[0];
+            const redirectUrl = `${currentUrl}/u.html?url=${encodeURIComponent(url)}&title=${encodeURIComponent(title)}`;
+            
+            // Show generated link and copy button
+            document.getElementById('generatedLink').value = redirectUrl;
+            document.getElementById('generatedLinkContainer').style.display = 'block';
+        }
+
+        function copyLink() {
+            const linkInput = document.getElementById('generatedLink');
+            linkInput.select();
+            document.execCommand('copy');
+            
+            // Visual feedback
+            const copyButton = document.querySelector('.copy-button');
+            const originalText = copyButton.textContent;
+            copyButton.textContent = 'Copied!';
+            setTimeout(() => {
+                copyButton.textContent = originalText;
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
