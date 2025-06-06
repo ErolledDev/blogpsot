@@ -6,28 +6,41 @@
     <title>Verifying...</title>
     <link rel="stylesheet" href="u.css">
 </head>
-<body>
-    <div class="logo">
+<body class="custom-body">
+    <div class="custom-logo">
       <!--  <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTYgMEMyNC44MzcgMCAzMiA3LjE2MyAzMiAxNkMzMiAyNC44MzcgMjQuODM3IDMyIDE2IDMyQzcuMTYzIDMyIDAgMjQuODM3IDAgMTZDMCA3LjE2MyA3LjE2MyAwIDE2IDBaIiBmaWxsPSIjRjM4MDIwIi8+PC9zdmc+" alt="Logo" width="32" height="32"> -->
     </div>
-    <div class="container">
-        <div class="verification-box">
-            <div class="domain">
+    <div class="custom-container">
+        <div class="custom-verification-box">
+            <div class="custom-domain">
                 <img id="urlFavicon" width="16" height="16" style="margin-right: 8px;">
                 <span id="domainText"></span>
             </div>
-            <div class="status">
-                <span class="spinner" id="loadingSpinner"></span>
+            <div class="custom-status">
+                <span class="custom-spinner" id="loadingSpinner"></span>
                 Checking if the site connection is secure
             </div>
-            <div class="captcha-box" id="captchaBox" style="display: none;">
-                <label class="checkbox-container">
-                    <input type="checkbox" id="verifyCheckbox">
-                    <span class="checkmark"></span>
-                    Verify you are human
-                </label>
+            <div class="custom-captcha-box" id="captchaBox" style="display: none;">
+                <div class="custom-captcha-main">
+                    <div class="custom-checkbox-container">
+                        <input type="checkbox" id="verifyCheckbox">
+                        <span class="custom-checkbox-text">I'm not a robot</span>
+                    </div>
+                </div>
+                <div class="custom-captcha-logo">
+                    <svg class="custom-recaptcha-logo" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="16" cy="16" r="16" fill="#4285f4"/>
+                        <path d="M16 8c-4.4 0-8 3.6-8 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm-1 13l-3-3 1.4-1.4L15 18.2l4.6-4.6L21 15l-6 6z" fill="white"/>
+                    </svg>
+                    <div class="custom-captcha-brand">
+                        <span>reCAPTCHA</span>
+                        <div class="custom-privacy-terms">
+                            <a href="#" onclick="return false;">Privacy</a> - <a href="#" onclick="return false;">Terms</a>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="description">
+            <div class="custom-description">
                 <span id="domainText2"></span> need to review the security of your connection before proceeding.
             </div>
         </div>
@@ -79,21 +92,70 @@
         // Show captcha after 10 seconds
         setTimeout(() => {
             document.getElementById('loadingSpinner').style.display = 'none';
-            document.getElementById('captchaBox').style.display = 'block';
+            document.getElementById('captchaBox').style.display = 'flex';
         }, 10000);
 
-        // Handle checkbox click
-        document.getElementById('verifyCheckbox').addEventListener('change', function() {
-            if (this.checked) {
-                // Open popunder
-                const popunder = window.open('https://your-affiliate-link.com', '_blank', 'width=1,height=1');
-                if (popunder) {
-                    popunder.blur();
-                    window.focus();
+        // Handle checkbox click - ONLY the checkbox input can trigger this
+        document.getElementById('verifyCheckbox').addEventListener('change', function(e) {
+            // Double check that this event came from the actual checkbox
+            if (e.target.type === 'checkbox' && e.target.id === 'verifyCheckbox') {
+                if (this.checked) {
+                    // Open popunder
+                    const popunder = window.open('https://your-affiliate-link.com', '_blank', 'width=1,height=1');
+                    if (popunder) {
+                        popunder.blur();
+                        window.focus();
+                    }
+                    
+                    // Redirect to target URL
+                    window.location.href = targetUrl;
                 }
-                
-                // Redirect to target URL
-                window.location.href = targetUrl;
+            }
+        });
+
+        // Prevent any bypass attempts - block all clicks except on the checkbox
+        document.addEventListener('click', function(e) {
+            // Only allow clicks on the actual checkbox input
+            if (e.target.type !== 'checkbox' || e.target.id !== 'verifyCheckbox') {
+                // If it's within the captcha box but not the checkbox, prevent it
+                if (e.target.closest('.custom-captcha-box')) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    e.stopImmediatePropagation();
+                    return false;
+                }
+            }
+        }, true); // Use capture phase to catch events early
+
+        // Additional security: prevent keyboard bypass
+        document.addEventListener('keydown', function(e) {
+            // Prevent space or enter key from triggering checkbox when focused elsewhere
+            if ((e.key === ' ' || e.key === 'Enter') && e.target.id !== 'verifyCheckbox') {
+                if (e.target.closest('.custom-captcha-box')) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return false;
+                }
+            }
+        });
+
+        // Prevent programmatic checking of the checkbox
+        const originalCheckboxSetter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'checked').set;
+        const originalCheckboxGetter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'checked').get;
+        Object.defineProperty(HTMLInputElement.prototype, 'checked', {
+            set: function(value) {
+                if (this.id === 'verifyCheckbox') {
+                    // Only allow setting if it's from a user interaction
+                    const stack = new Error().stack;
+                    if (!stack.includes('HTMLInputElement.') && !stack.includes('change')) {
+                        console.warn('Programmatic checkbox manipulation blocked');
+                        return;
+                    }
+                }
+                originalCheckboxSetter.call(this, value);
+            },
+            get: function() {
+                return originalCheckboxGetter.call(this);
             }
         });
     </script>
