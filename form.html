@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Shortener - Create Link</title>
+    <link rel="stylesheet" href="form.css">
+    <meta name="robots" content="noindex, nofollow">
+</head>
+<body>
+    <div class="form-container">
+        <div class="form-header">
+            <h1>🔗 URL Shortener</h1>
+            <p class="form-subtitle">Create secure, verified links</p>
+        </div>
+
+        <div class="stats-display">
+            <div class="stat-item">
+                <span class="stat-number" id="totalLinks">0</span>
+                <span class="stat-label">Links Created</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" id="todayLinks">0</span>
+                <span class="stat-label">Today</span>
+            </div>
+        </div>
+        
+        <form id="urlForm" class="url-form" novalidate>
+            <div class="input-group">
+                <label for="url" class="input-label">Target URL</label>
+                <input type="url" id="url" required placeholder="https://example.com" 
+                       pattern="https?://.+" title="Please enter a valid URL starting with http:// or https://">
+                <div class="error-message" id="urlError"></div>
+            </div>
+            
+            <div class="input-group">
+                <label for="title" class="input-label">Page Title</label>
+                <input type="text" id="title" required placeholder="Enter a descriptive title" 
+                       maxlength="100" minlength="3">
+                <div class="error-message" id="titleError"></div>
+                <div class="input-hint">This will be shown during verification</div>
+            </div>
+            
+            <div class="input-group" id="generatedLinkContainer" style="display: none;">
+                <label for="generatedLink" class="input-label">Generated Link</label>
+                <div class="generated-link-wrapper">
+                    <input type="text" id="generatedLink" readonly>
+                    <button type="button" onclick="copyLink()" class="copy-button" id="copyButton">Copy</button>
+                </div>
+            </div>
+            
+            <button type="submit" class="submit-button" id="submitButton">
+                <span class="button-text">Generate Secure Link</span>
+            </button>
+        </form>
+        
+        <div class="form-footer">
+            <p>🔒 All links are secured with verification</p>
+            <a href="index.html" class="back-link">← Back to Home</a>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <script src="form.js"></script>
+</body>
+</html>

@@ -3,53 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>URL Shortener</title>
+    <title>URL Shortener - Create Secure Links</title>
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
     <div class="container">
-        <form id="urlForm" onsubmit="handleSubmit(event)">
-            <h1>URL Shortener</h1>
-            <div class="input-group">
-                <input type="url" id="url" required placeholder="Enter URL">
+        <div class="header">
+            <h1>🔗 URL Shortener</h1>
+            <p class="subtitle">Create secure, verified links with ease</p>
+        </div>
+
+        <div class="stats-section">
+            <div class="stat-card">
+                <span class="stat-number" id="totalLinks">0</span>
+                <span class="stat-label">Total Links</span>
             </div>
-            <div class="input-group">
-                <input type="text" id="title" required placeholder="Enter Title">
+            <div class="stat-card">
+                <span class="stat-number" id="todayLinks">0</span>
+                <span class="stat-label">Today</span>
             </div>
-            <div class="input-group" id="generatedLinkContainer" style="display: none;">
-                <input type="text" id="generatedLink" readonly>
-                <button type="button" onclick="copyLink()" class="copy-button">Copy Link</button>
+        </div>
+
+        <div class="main-content">
+            <div class="hero-section">
+                <h2>Transform Your Links</h2>
+                <p>Create secure, verified short links that protect your users and track engagement.</p>
+                <a href="form.html" class="generate-button">
+                    Generate Link
+                </a>
             </div>
-            <button type="submit">Generate Link</button>
-        </form>
+        </div>
+
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">🔒</div>
+                <h3>Secure Verification</h3>
+                <p>All links include security verification to protect users</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">⚡</div>
+                <h3>Fast & Reliable</h3>
+                <p>Quick link generation with reliable redirection</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">📊</div>
+                <h3>Track Usage</h3>
+                <p>Monitor your link creation statistics</p>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>🔗 Secure URL Shortener - Protecting your links since 2024</p>
+        </div>
     </div>
 
-    <script>
-        function handleSubmit(e) {
-            e.preventDefault();
-            const url = document.getElementById('url').value;
-            const title = document.getElementById('title').value;
-            const currentUrl = window.location.href.split('/index.html')[0];
-            const redirectUrl = `${currentUrl}/u.html?url=${encodeURIComponent(url)}&title=${encodeURIComponent(title)}`;
-            
-            // Show generated link and copy button
-            document.getElementById('generatedLink').value = redirectUrl;
-            document.getElementById('generatedLinkContainer').style.display = 'block';
-        }
-
-        function copyLink() {
-            const linkInput = document.getElementById('generatedLink');
-            linkInput.select();
-            document.execCommand('copy');
-            
-            // Visual feedback
-            const copyButton = document.querySelector('.copy-button');
-            const originalText = copyButton.textContent;
-            copyButton.textContent = 'Copied!';
-            setTimeout(() => {
-                copyButton.textContent = originalText;
-            }, 2000);
-        }
-    </script>
+    <script src="index.js"></script>
 </body>
 </html>
