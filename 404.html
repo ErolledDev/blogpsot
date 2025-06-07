@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Page Not Found | URL Shortener</title>
+    <link rel="stylesheet" href="style.css">
+    <meta name="robots" content="noindex, nofollow">
+</head>
+<body class="index-body">
+    <div class="container">
+        <div class="header">
+            <h1>🔗 URL Shortener</h1>
+            <p class="subtitle">Oops! Something went wrong</p>
+        </div>
+
+        <div class="main-content" style="text-align: center; padding: 4rem 2rem;">
+            <div class="error-section">
+                <div class="error-icon" style="font-size: 6rem; margin-bottom: 2rem;">🔍</div>
+                <h2 style="font-size: 3rem; font-weight: 700; color: #1e293b; margin-bottom: 1rem;">404</h2>
+                <h3 style="font-size: 1.5rem; font-weight: 600; color: #64748b; margin-bottom: 1.5rem;">Page Not Found</h3>
+                <p style="font-size: 1.1rem; color: #64748b; margin-bottom: 3rem; max-width: 500px; margin-left: auto; margin-right: auto; line-height: 1.6;">
+                    The page you're looking for doesn't exist. It might have been moved, deleted, or you entered the wrong URL.
+                </p>
+                
+                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                    <a href="home.html" class="generate-button" style="text-decoration: none;">
+                        🏠 Go Home
+                    </a>
+                    <a href="form.html" class="generate-button" style="background: linear-gradient(135deg, #059669 0%, #047857 100%); text-decoration: none;">
+                        ➕ Create Link
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="features" style="margin-top: 3rem;">
+            <div class="feature">
+                <div class="feature-icon">🔗</div>
+                <h3>Create Links</h3>
+                <p>Generate secure short links quickly</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🔒</div>
+                <h3>Secure & Safe</h3>
+                <p>All links are verified and protected</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">📊</div>
+                <h3>Track Stats</h3>
+                <p>Monitor your link performance</p>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>🔗 Secure URL Shortener - Protecting your links since 2024</p>
+        </div>
+    </div>
+
+    <style>
+        .error-section {
+            animation: fadeInUp 0.6s ease-out;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .generate-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.4);
+        }
+        
+        @media (max-width: 576px) {
+            .error-section h2 {
+                font-size: 2.5rem !important;
+            }
+            
+            .error-section h3 {
+                font-size: 1.25rem !important;
+            }
+            
+            .error-section p {
+                font-size: 1rem !important;
+                padding: 0 1rem;
+            }
+            
+            .error-section > div {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .generate-button {
+                width: 100%;
+                max-width: 250px;
+            }
+        }
+    </style>
+</body>
+</html>
