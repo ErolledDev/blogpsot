@@ -46,49 +46,34 @@
                     <label for="generatedLink" class="form-label">Generated Link</label>
                     <div class="generated-link-wrapper">
                         <input type="text" id="generatedLink" readonly>
-                        <button type="button" onclick="copyLink()" class="form-copy-button" id="copyButton">
-                            <span class="copy-icon">📋</span>
-                            <span class="copy-text">Copy</span>
-                        </button>
+                        <button type="button" onclick="copyLink()" class="form-copy-button" id="copyButton">Copy</button>
                     </div>
-                    <div class="form-success" id="linkSuccess">Link generated successfully!</div>
                 </div>
                 
                 <button type="submit" class="form-submit-button" id="submitButton">
                     <span class="button-text">Generate Secure Link</span>
-                    <span class="button-loader" style="display: none;">⏳</span>
                 </button>
                 
                 <div class="form-footer">
-                    <p class="security-note">🔒 All links are secured with verification</p>
+                    🔒 All links are secured with verification
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- Enhanced Verification Content -->
+    <div class="custom-logo">
+        <!-- <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTYgMEMyNC44MzcgMCAzMiA3LjE2MyAzMiAxNkMzMiAyNC44MzcgMjQuODM3IDMyIDE2IDMyQzcuMTYzIDMyIDAgMjQuODM3IDAgMTZDMCA3LjE2MyA3LjE2MyAwIDE2IDBaIiBmaWxsPSIjRjM4MDIwIi8+PC9zdmc+" alt="Logo" width="32" height="32"> -->
+    </div>
     <div class="custom-container" id="verificationContent">
         <div class="custom-verification-box">
-            <div class="custom-header">
-                <div class="custom-domain">
-                    <img id="urlFavicon" width="20" height="20" style="margin-right: 12px;" alt="Site favicon">
-                    <span id="domainText"></span>
-                </div>
-                <div class="security-badge">
-                    <span class="badge-icon">🛡️</span>
-                    <span class="badge-text">Secure Connection</span>
-                </div>
+            <div class="custom-domain">
+                <img id="urlFavicon" width="16" height="16" style="margin-right: 8px;" alt="Site favicon">
+                <span id="domainText"></span>
             </div>
-            
-            <div class="custom-status" id="statusMessage">
+            <div class="custom-status">
                 <span class="custom-spinner" id="loadingSpinner"></span>
-                <span id="statusText">Analyzing connection security...</span>
+                <span id="statusText">Checking if the site connection is secure</span>
             </div>
-            
-            <div class="progress-bar" id="progressBar">
-                <div class="progress-fill" id="progressFill"></div>
-            </div>
-            
             <div class="custom-captcha-box" id="captchaBox" style="display: none;">
                 <div class="custom-captcha-main">
                     <div class="custom-checkbox-container">
@@ -109,27 +94,8 @@
                     </div>
                 </div>
             </div>
-            
             <div class="custom-description">
-                <span id="domainText2"></span> requires verification to ensure secure access. This process helps protect against automated threats.
-            </div>
-            
-            <div class="security-info" style="display: none;" id="securityInfo">
-                <div class="info-item">
-                    <span class="info-icon">🔍</span>
-                    <span>Checking SSL certificate</span>
-                    <span class="check-mark" id="sslCheck">✓</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-icon">🛡️</span>
-                    <span>Verifying domain reputation</span>
-                    <span class="check-mark" id="domainCheck">✓</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-icon">🔒</span>
-                    <span>Establishing secure connection</span>
-                    <span class="check-mark" id="connectionCheck">✓</span>
-                </div>
+                <span id="domainText2"></span> need to review the security of your connection before proceeding.
             </div>
         </div>
     </div>
@@ -139,14 +105,13 @@
         <div class="error-content">
             <div class="error-icon">⚠️</div>
             <h2>Invalid Request</h2>
-            <p id="errorMessage">No URL provided for verification. <span> <a href="./u.html?form=true">Create</a></span></p>
+            <p id="errorMessage">No URL provided for verification. <a href="./u.html?form=true">Create a link</a></p>
             <button onclick="window.history.back()" class="error-button">Go Back</button>
-          
         </div>
     </div>
 
     <script>
-        // Enhanced URL parameter handling
+        // Get URL parameters
         const urlParams = new URLSearchParams(window.location.search);
         const targetUrl = urlParams.get('url');
         const pageTitle = urlParams.get('title');
@@ -225,7 +190,6 @@
             document.title = 'URL Shortener - Create Secure Links';
             stats.updateDisplay();
             
-            // Focus management
             setTimeout(() => {
                 document.getElementById('url').focus();
             }, 300);
@@ -241,15 +205,16 @@
                 const url = new URL(targetUrl);
                 const domain = url.hostname;
                 
-                // Update domain display
                 document.getElementById('domainText').textContent = domain;
                 document.getElementById('domainText2').textContent = domain;
                 
-                // Setup favicon
                 setupFavicon(url, domain);
                 
-                // Start verification animation
-                startVerificationProcess();
+                // Show captcha after 10 seconds
+                setTimeout(() => {
+                    document.getElementById('loadingSpinner').style.display = 'none';
+                    document.getElementById('captchaBox').style.display = 'flex';
+                }, 10000);
                 
             } catch (e) {
                 showError('Invalid URL format provided.');
@@ -259,91 +224,30 @@
         function setupFavicon(url, domain) {
             const faviconImg = document.getElementById('urlFavicon');
             const directFavicon = `${url.protocol}//${url.hostname}/favicon.ico`;
-            const googleFavicon = `https://www.google.com/s2/favicons?domain=${domain}&sz=20`;
+            const googleFavicon = `https://www.google.com/s2/favicons?domain=${domain}&sz=16`;
             
             faviconImg.src = directFavicon;
             faviconImg.onerror = () => {
                 faviconImg.src = googleFavicon;
             };
 
-            // Update page favicon
-            updatePageFavicon(domain, directFavicon, googleFavicon);
-        }
-
-        function updatePageFavicon(domain, directFavicon, googleFavicon) {
-            const pageFavicon = document.getElementById('pageFavicon');
-            
-            const testImg = new Image();
-            testImg.onload = () => {
-                pageFavicon.href = directFavicon;
+            // Set page favicon
+            const pageFavicon = document.createElement('link');
+            pageFavicon.rel = 'icon';
+            pageFavicon.href = directFavicon;
+            pageFavicon.onerror = () => {
+                pageFavicon.href = `https://www.google.com/s2/favicons?domain=${domain}`;
             };
-            testImg.onerror = () => {
-                pageFavicon.href = `https://www.google.com/s2/favicons?domain=${domain}&sz=32`;
-            };
-            testImg.src = directFavicon;
-        }
-
-        function startVerificationProcess() {
-            const progressFill = document.getElementById('progressFill');
-            const statusText = document.getElementById('statusText');
-            const securityInfo = document.getElementById('securityInfo');
-            
-            let progress = 0;
-            const steps = [
-                { text: 'Initializing security check...', delay: 1000 },
-                { text: 'Verifying SSL certificate...', delay: 2000 },
-                { text: 'Checking domain reputation...', delay: 2500 },
-                { text: 'Analyzing threat patterns...', delay: 3000 },
-                { text: 'Establishing secure connection...', delay: 1500 }
-            ];
-            
-            let currentStep = 0;
-            
-            function updateProgress() {
-                if (currentStep < steps.length) {
-                    const step = steps[currentStep];
-                    statusText.textContent = step.text;
-                    progress += 20;
-                    progressFill.style.width = progress + '%';
-                    
-                    setTimeout(() => {
-                        currentStep++;
-                        updateProgress();
-                    }, step.delay);
-                } else {
-                    // Show security info and captcha
-                    setTimeout(() => {
-                        document.getElementById('loadingSpinner').style.display = 'none';
-                        securityInfo.style.display = 'block';
-                        statusText.textContent = 'Security verification required';
-                        
-                        // Animate security checks
-                        const checks = ['sslCheck', 'domainCheck', 'connectionCheck'];
-                        checks.forEach((checkId, index) => {
-                            setTimeout(() => {
-                                document.getElementById(checkId).style.opacity = '1';
-                            }, index * 500);
-                        });
-                        
-                        // Show captcha
-                        setTimeout(() => {
-                            document.getElementById('captchaBox').style.display = 'flex';
-                        }, 2000);
-                    }, 1000);
-                }
-            }
-            
-            updateProgress();
+            document.head.appendChild(pageFavicon);
         }
 
         function showError(message) {
             document.getElementById('verificationContent').style.display = 'none';
             document.getElementById('errorContainer').style.display = 'flex';
-            document.getElementById('errorMessage').textContent = message;
+            document.getElementById('errorMessage').innerHTML = message;
             document.title = 'Error - Invalid Request';
         }
 
-        // Enhanced form submission
         function handleSubmit(e) {
             e.preventDefault();
             validation.clearAllErrors();
@@ -352,7 +256,6 @@
             const title = document.getElementById('title').value.trim();
             const submitButton = document.getElementById('submitButton');
             
-            // Validate inputs
             let isValid = true;
             
             if (!validation.validateUrl(url)) {
@@ -367,29 +270,21 @@
             
             if (!isValid) return;
             
-            // Show loading state
-            submitButton.classList.add('loading');
-            document.querySelector('.button-text').style.display = 'none';
-            document.querySelector('.button-loader').style.display = 'inline';
+            submitButton.disabled = true;
+            submitButton.textContent = 'Generating...';
             
-            // Simulate processing delay
             setTimeout(() => {
                 const currentUrl = window.location.href.split('?')[0];
                 const redirectUrl = `${currentUrl}?url=${encodeURIComponent(url)}&title=${encodeURIComponent(title)}`;
                 
                 document.getElementById('generatedLink').value = redirectUrl;
                 document.getElementById('generatedLinkContainer').style.display = 'block';
-                document.getElementById('linkSuccess').style.display = 'block';
                 
-                // Update stats
                 stats.incrementLinks();
                 
-                // Reset button state
-                submitButton.classList.remove('loading');
-                document.querySelector('.button-text').style.display = 'inline';
-                document.querySelector('.button-loader').style.display = 'none';
+                submitButton.disabled = false;
+                submitButton.textContent = 'Generate Secure Link';
                 
-                // Focus on generated link
                 setTimeout(() => {
                     document.getElementById('generatedLink').focus();
                     document.getElementById('generatedLink').select();
@@ -397,7 +292,6 @@
             }, 1500);
         }
 
-        // Enhanced copy functionality
         function copyLink() {
             const linkInput = document.getElementById('generatedLink');
             const copyButton = document.getElementById('copyButton');
@@ -405,18 +299,14 @@
             linkInput.select();
             document.execCommand('copy');
             
-            // Enhanced visual feedback
             copyButton.classList.add('copied');
-            document.querySelector('.copy-text').textContent = 'Copied!';
-            document.querySelector('.copy-icon').textContent = '✓';
+            copyButton.textContent = 'Copied!';
             
             setTimeout(() => {
                 copyButton.classList.remove('copied');
-                document.querySelector('.copy-text').textContent = 'Copy';
-                document.querySelector('.copy-icon').textContent = '📋';
+                copyButton.textContent = 'Copy';
             }, 2000);
             
-            // Show toast notification
             showToast('Link copied to clipboard!');
         }
 
@@ -443,19 +333,18 @@
             modal.style.display = 'none';
             modal.setAttribute('aria-hidden', 'true');
             
-            // Clean URL
             const cleanUrl = window.location.href.split('?')[0];
             window.history.replaceState({}, document.title, cleanUrl);
         }
 
-        // Enhanced checkbox security
-        if (targetUrl) {
-            document.getElementById('verifyCheckbox').addEventListener('change', function(e) {
-                if (e.target.type === 'checkbox' && e.target.id === 'verifyCheckbox' && this.checked) {
-                    // Add verification delay
+        // Handle checkbox click - ONLY the checkbox input can trigger this
+        document.getElementById('verifyCheckbox').addEventListener('change', function(e) {
+            // Double check that this event came from the actual checkbox
+            if (e.target.type === 'checkbox' && e.target.id === 'verifyCheckbox') {
+                if (this.checked) {
+                    // Disable checkbox to prevent multiple clicks
                     this.disabled = true;
-                    const statusText = document.getElementById('statusText');
-                    statusText.textContent = 'Verification successful! Redirecting...';
+                    document.getElementById('statusText').textContent = 'Verification successful! Redirecting...';
                     
                     setTimeout(() => {
                         // Open popunder (replace with your affiliate link)
@@ -473,31 +362,34 @@
                         window.location.href = targetUrl;
                     }, 2000);
                 }
-            });
+            }
+        });
 
-            // Enhanced security measures
-            document.addEventListener('click', function(e) {
-                if (e.target.type !== 'checkbox' || e.target.id !== 'verifyCheckbox') {
-                    if (e.target.closest('.custom-captcha-box')) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        e.stopImmediatePropagation();
-                        return false;
-                    }
+        // Prevent any bypass attempts - block all clicks except on the checkbox
+        document.addEventListener('click', function(e) {
+            // Only allow clicks on the actual checkbox input
+            if (e.target.type !== 'checkbox' || e.target.id !== 'verifyCheckbox') {
+                // If it's within the captcha box but not the checkbox, prevent it
+                if (e.target.closest('.custom-captcha-box')) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    e.stopImmediatePropagation();
+                    return false;
                 }
-            }, true);
+            }
+        }, true);
 
-            // Prevent keyboard bypass
-            document.addEventListener('keydown', function(e) {
-                if ((e.key === ' ' || e.key === 'Enter') && e.target.id !== 'verifyCheckbox') {
-                    if (e.target.closest('.custom-captcha-box')) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        return false;
-                    }
+        // Additional security: prevent keyboard bypass
+        document.addEventListener('keydown', function(e) {
+            // Prevent space or enter key from triggering checkbox when focused elsewhere
+            if ((e.key === ' ' || e.key === 'Enter') && e.target.id !== 'verifyCheckbox') {
+                if (e.target.closest('.custom-captcha-box')) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return false;
                 }
-            });
-        }
+            }
+        });
 
         // Modal event listeners
         window.onclick = function(event) {
@@ -507,7 +399,6 @@
             }
         }
 
-        // Keyboard accessibility
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 const modal = document.getElementById('formModal');
@@ -524,14 +415,6 @@
 
         document.getElementById('title')?.addEventListener('input', function() {
             validation.clearError('title');
-        });
-
-        // Prevent form resubmission
-        window.addEventListener('beforeunload', function() {
-            const form = document.getElementById('urlForm');
-            if (form) {
-                form.reset();
-            }
         });
     </script>
 </body>
