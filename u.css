@@ -38,7 +38,7 @@
 }
 
 .custom-domain {
-    font-size: 24px;
+    font-size: clamp(28px, 4vw, 36px);
     font-weight: 600;
     color: #1a1a1a;
     margin-bottom: 4px;
@@ -47,14 +47,14 @@
 .custom-status {
     display: flex;
     align-items: center;
-    font-size: 16px;
+    font-size: clamp(18px, 2.5vw, 22px);
     color: #404245;
     font-weight: 500;
     margin-bottom: 8px;
 }
 
 .custom-description {
-    font-size: 14px;
+    font-size: clamp(16px, 2vw, 20px);
     color: #666;
     line-height: 1.5;
     margin-bottom: 24px;
@@ -95,7 +95,7 @@
     align-items: center;
     cursor: default; /* Remove pointer cursor from label */
     user-select: none;
-    font-size: 14px;
+    font-size: clamp(16px, 2vw, 18px);
     color: #222;
     font-weight: 500;
     font-family: Roboto, arial, sans-serif;
@@ -106,8 +106,8 @@
     position: relative; /* Change from absolute to relative */
     opacity: 1; /* Make visible */
     cursor: pointer;
-    height: 28px;
-    width: 28px;
+    height: clamp(28px, 3vw, 32px);
+    width: clamp(28px, 3vw, 32px);
     margin: 0;
     pointer-events: auto; /* Enable pointer events only on the input */
     appearance: none; /* Remove default checkbox appearance */
@@ -132,8 +132,8 @@
     content: "";
     position: absolute;
     display: block;
-    left: 9px;
-    top: 5px;
+    left: calc(50% - 3px);
+    top: calc(50% - 5px);
     width: 6px;
     height: 10px;
     border: solid white;
@@ -157,8 +157,8 @@
 }
 
 .custom-recaptcha-logo {
-    width: 32px;
-    height: 32px;
+    width: clamp(32px, 4vw, 40px);
+    height: clamp(32px, 4vw, 40px);
     margin-bottom: 2px;
 }
 
@@ -166,7 +166,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    font-size: 8px;
+    font-size: clamp(8px, 1vw, 10px);
     color: #555;
     font-family: Roboto, arial, sans-serif;
     line-height: 1.2;
@@ -180,7 +180,7 @@
 }
 
 .custom-privacy-terms {
-    font-size: 8px;
+    font-size: clamp(8px, 1vw, 10px);
     white-space: nowrap;
 }
 
@@ -195,8 +195,8 @@
 }
 
 .custom-spinner {
-    width: 20px;
-    height: 20px;
+    width: clamp(20px, 2.5vw, 24px);
+    height: clamp(20px, 2.5vw, 24px);
     margin-right: 12px;
     border: 2px solid #f3f3f3;
     border-top: 2px solid #0051c3;
