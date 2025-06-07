@@ -452,7 +452,7 @@ body {
     max-width: 90%;
 }
 
-/* Fixed size reCAPTCHA box - completely non-responsive */
+/* Simple reCAPTCHA box */
 .custom-captcha-box {
     border: 2px solid #d3d3d3;
     border-radius: 3px;
@@ -462,17 +462,16 @@ body {
     height: 74px;
     transition: all 0.2s ease;
     cursor: default;
-    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
     pointer-events: none;
     margin-top: 8px;
     position: relative;
     flex-shrink: 0;
-    /* Remove any flex properties that could make it responsive */
 }
 
 .custom-captcha-box:hover {
-    border-color: #c6c6c6;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+    
+    box-shadow: 0 2px 8px rgba(66, 133, 244, 0.15);
 }
 
 .custom-captcha-main {
@@ -490,11 +489,12 @@ body {
     font-size: 14px;
     color: #000;
     font-weight: normal;
-    font-family: arial, sans-serif;
+    font-family: Roboto, arial, sans-serif;
     pointer-events: none;
     white-space: nowrap;
 }
 
+/* Seamless spinner checkbox - transforms completely */
 .custom-checkbox-container input {
     position: relative;
     opacity: 1;
@@ -506,42 +506,29 @@ body {
     pointer-events: auto;
     appearance: none;
     background-color: #fff;
-    border: 2px solid #c1c1c1;
+    border: 2px solid #d3d3d3;
     border-radius: 2px;
-    transition: all 0.15s ease;
+    transition: all 0.3s ease;
     flex-shrink: 0;
     vertical-align: middle;
 }
 
 .custom-checkbox-container input:hover {
-    border-color: #4285f4;
-    box-shadow: 0 0 0 1px #4285f4;
+    
+    box-shadow: 0 0 0 1px rgba(66, 133, 244, 0.3);
 }
 
-/* Spinning animation when clicked but not yet checked */
+/* Spinning state - complete transformation to spinner */
 .custom-checkbox-container input.spinning {
-    background-color: #fff;
-    border-color: #4285f4;
-    animation: checkboxSpin 1s linear;
+    background-color: transparent;
+    border: 3px solid #fff;
+    border-top: 3px solid #0051c3;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
 }
 
 .custom-checkbox-container input.spinning::after {
-    content: "";
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    width: 12px;
-    height: 12px;
-    margin: -6px 0 0 -6px;
-    border: 2px solid #4285f4;
-    border-top: 2px solid transparent;
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-}
-
-@keyframes checkboxSpin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    display: none;
 }
 
 @keyframes spin {
@@ -549,9 +536,11 @@ body {
     100% { transform: rotate(360deg); }
 }
 
+/* Checked state - clean blue background with checkmark */
 .custom-checkbox-container input:checked {
-    background-color: #4285f4;
-    border-color: #4285f4;
+    background-color: #0051c3;
+    border-color: #0051c3;
+    border-radius: 2px;
     animation: none;
 }
 
@@ -566,18 +555,7 @@ body {
     border: solid white;
     border-width: 0 2px 2px 0;
     transform: rotate(45deg);
-    animation: checkmarkAppear 0.3s ease-in-out;
-}
-
-@keyframes checkmarkAppear {
-    0% {
-        opacity: 0;
-        transform: rotate(45deg) scale(0.5);
-    }
-    100% {
-        opacity: 1;
-        transform: rotate(45deg) scale(1);
-    }
+    animation: none;
 }
 
 .custom-checkbox-container input:disabled {
