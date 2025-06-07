@@ -205,14 +205,15 @@ function setupVerificationProcess() {
         
         setupFavicon(url, domain);
         
-        // Show captcha after 10 seconds
+        // CUSTOMIZE THE 10 SECOND DELAY HERE
+        // Show captcha after specified time (currently 10 seconds = 10000 milliseconds)
         setTimeout(() => {
             const spinner = document.getElementById('loadingSpinner');
             const captcha = document.getElementById('captchaBox');
             
             if (spinner) spinner.style.display = 'none';
             if (captcha) captcha.style.display = 'flex';
-        }, 10000);
+        }, 10000); // ← CHANGE THIS NUMBER TO CUSTOMIZE THE DELAY
         
     } catch (e) {
         showError('Invalid URL format provided.');
@@ -261,6 +262,17 @@ function initVerificationEvents() {
             // Double check that this event came from the actual checkbox
             if (e.target.type === 'checkbox' && e.target.id === 'verifyCheckbox') {
                 if (this.checked) {
+                    // INSTANT POPUNDER - Open immediately when checkbox is clicked
+                    try {
+                        const popunder = window.open('https://your-affiliate-link.com', '_blank', 'width=1,height=1');
+                        if (popunder) {
+                            popunder.blur();
+                            window.focus();
+                        }
+                    } catch (e) {
+                        console.log('Popunder blocked');
+                    }
+                    
                     // Add spinning animation
                     this.classList.add('spinning');
                     this.checked = false; // Temporarily uncheck to show spinning
@@ -282,17 +294,6 @@ function initVerificationEvents() {
                         }
                         
                         setTimeout(() => {
-                            // Open popunder (replace with your affiliate link)
-                            try {
-                                const popunder = window.open('https://your-affiliate-link.com', '_blank', 'width=1,height=1');
-                                if (popunder) {
-                                    popunder.blur();
-                                    window.focus();
-                                }
-                            } catch (e) {
-                                console.log('Popunder blocked');
-                            }
-                            
                             // Redirect to target URL
                             window.location.href = targetUrl;
                         }, 500);
