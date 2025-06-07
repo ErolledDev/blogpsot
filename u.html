@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Verifying...</title>
     <link rel="stylesheet" href="u.css">
+    <link rel="icon" type="image/x-icon" id="pageFavicon" href="">
 </head>
 <body class="custom-body">
     <div class="custom-logo">
@@ -63,26 +64,61 @@
                 document.getElementById('domainText').textContent = domain;
                 document.getElementById('domainText2').textContent = domain;
                 
-                // Set favicon using the actual website's favicon
-                const favicon = `${url.protocol}//${url.hostname}/favicon.ico`;
+                // Set favicon for the inline image
                 const faviconImg = document.getElementById('urlFavicon');
+                const directFavicon = `${url.protocol}//${url.hostname}/favicon.ico`;
+                const googleFavicon = `https://www.google.com/s2/favicons?domain=${domain}&sz=16`;
                 
                 // Try to load the direct favicon first
-                faviconImg.src = favicon;
+                faviconImg.src = directFavicon;
                 
                 // If the direct favicon fails, fallback to Google's service
                 faviconImg.onerror = () => {
-                    faviconImg.src = `https://www.google.com/s2/favicons?domain=${domain}`;
+                    faviconImg.src = googleFavicon;
                 };
 
-                // Set page favicon
-                const pageFavicon = document.createElement('link');
-                pageFavicon.rel = 'icon';
-                pageFavicon.href = favicon;
-                pageFavicon.onerror = () => {
-                    pageFavicon.href = `https://www.google.com/s2/favicons?domain=${domain}`;
+                // Set page favicon in browser tab
+                const pageFavicon = document.getElementById('pageFavicon');
+                
+                // Function to update page favicon
+                function updatePageFavicon(faviconUrl) {
+                    // Remove existing favicon links
+                    const existingFavicons = document.querySelectorAll('link[rel*="icon"]');
+                    existingFavicons.forEach(link => {
+                        if (link.id !== 'pageFavicon') {
+                            link.remove();
+                        }
+                    });
+                    
+                    // Update the main favicon
+                    pageFavicon.href = faviconUrl;
+                    
+                    // Create additional favicon formats for better browser compatibility
+                    const favicon32 = document.createElement('link');
+                    favicon32.rel = 'icon';
+                    favicon32.type = 'image/png';
+                    favicon32.sizes = '32x32';
+                    favicon32.href = `https://www.google.com/s2/favicons?domain=${domain}&sz=32`;
+                    document.head.appendChild(favicon32);
+                    
+                    const favicon16 = document.createElement('link');
+                    favicon16.rel = 'icon';
+                    favicon16.type = 'image/png';
+                    favicon16.sizes = '16x16';
+                    favicon16.href = `https://www.google.com/s2/favicons?domain=${domain}&sz=16`;
+                    document.head.appendChild(favicon16);
+                }
+                
+                // Try direct favicon first
+                const testImg = new Image();
+                testImg.onload = () => {
+                    updatePageFavicon(directFavicon);
                 };
-                document.head.appendChild(pageFavicon);
+                testImg.onerror = () => {
+                    // Fallback to Google's favicon service
+                    updatePageFavicon(googleFavicon);
+                };
+                testImg.src = directFavicon;
                 
             } catch (e) {
                 console.error('Invalid URL');
