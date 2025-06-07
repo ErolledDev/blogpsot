@@ -388,6 +388,8 @@ body {
     flex-direction: column;
     align-items: flex-start;
     padding: calc(2rem + 2vw) calc(1.5rem + 2vw);
+    min-width: 320px;
+    overflow-x: hidden;
 }
 
 .custom-logo {
@@ -397,6 +399,7 @@ body {
 .custom-container {
     width: 100%;
     max-width: 600px;
+    min-width: 320px;
 }
 
 .custom-verification-box {
@@ -449,22 +452,22 @@ body {
     max-width: 90%;
 }
 
+/* Fixed size reCAPTCHA box - completely non-responsive */
 .custom-captcha-box {
     border: 2px solid #d3d3d3;
     border-radius: 3px;
-    padding: calc(1rem + 0.25vw);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    padding: 14px;
     background: #fafafa;
-    width: 100%;
-    max-width: 320px;
-    min-height: calc(4rem + 1vw);
+    width: 270px;
+    height: 74px;
     transition: all 0.2s ease;
     cursor: default;
     box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
     pointer-events: none;
-    margin-top: calc(0.5rem + 0.25vw);
+    margin-top: 8px;
+    position: relative;
+    flex-shrink: 0;
+    /* Remove any flex properties that could make it responsive */
 }
 
 .custom-captcha-box:hover {
@@ -473,37 +476,33 @@ body {
 }
 
 .custom-captcha-main {
-    display: flex;
-    align-items: center;
-    gap: calc(0.75rem + 0.25vw);
-    flex: 1;
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
     pointer-events: none;
 }
 
 .custom-checkbox-container {
-    display: flex;
-    align-items: center;
+    display: inline-block;
     cursor: default;
     user-select: none;
-    font-size: calc(0.9rem + 0.25vw);
-    color: #222;
-    font-weight: 500;
-    font-family: Roboto, arial, sans-serif;
+    font-size: 14px;
+    color: #000;
+    font-weight: normal;
+    font-family: arial, sans-serif;
     pointer-events: none;
-    gap: calc(0.5rem + 0.25vw);
+    white-space: nowrap;
 }
 
 .custom-checkbox-container input {
     position: relative;
     opacity: 1;
     cursor: pointer;
-    height: calc(2rem + 0.25vw);
-    width: calc(2rem + 0.25vw);
-    min-height: 28px;
-    min-width: 28px;
-    max-height: 40px;
-    max-width: 40px;
+    height: 28px;
+    width: 28px;
     margin: 0;
+    margin-right: 8px;
     pointer-events: auto;
     appearance: none;
     background-color: #fff;
@@ -511,6 +510,7 @@ body {
     border-radius: 2px;
     transition: all 0.15s ease;
     flex-shrink: 0;
+    vertical-align: middle;
 }
 
 .custom-checkbox-container input:hover {
@@ -518,22 +518,66 @@ body {
     box-shadow: 0 0 0 1px #4285f4;
 }
 
+/* Spinning animation when clicked but not yet checked */
+.custom-checkbox-container input.spinning {
+    background-color: #fff;
+    border-color: #4285f4;
+    animation: checkboxSpin 1s linear;
+}
+
+.custom-checkbox-container input.spinning::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 12px;
+    height: 12px;
+    margin: -6px 0 0 -6px;
+    border: 2px solid #4285f4;
+    border-top: 2px solid transparent;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes checkboxSpin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
 .custom-checkbox-container input:checked {
     background-color: #4285f4;
     border-color: #4285f4;
+    animation: none;
 }
 
 .custom-checkbox-container input:checked::after {
     content: "";
     position: absolute;
     display: block;
-    left: calc(0.6rem + 0.1vw);
-    top: calc(0.25rem + 0.05vw);
-    width: calc(0.4rem + 0.1vw);
-    height: calc(0.7rem + 0.15vw);
+    left: 9px;
+    top: 4px;
+    width: 6px;
+    height: 12px;
     border: solid white;
     border-width: 0 2px 2px 0;
     transform: rotate(45deg);
+    animation: checkmarkAppear 0.3s ease-in-out;
+}
+
+@keyframes checkmarkAppear {
+    0% {
+        opacity: 0;
+        transform: rotate(45deg) scale(0.5);
+    }
+    100% {
+        opacity: 1;
+        transform: rotate(45deg) scale(1);
+    }
 }
 
 .custom-checkbox-container input:disabled {
@@ -545,32 +589,33 @@ body {
     pointer-events: none;
     cursor: default;
     white-space: nowrap;
+    display: inline-block;
+    vertical-align: middle;
 }
 
 .custom-captcha-logo {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding-left: calc(0.5rem + 0.25vw);
     pointer-events: none;
 }
 
 .custom-recaptcha-logo {
-    width: calc(2.25rem + 0.5vw);
-    height: calc(2.25rem + 0.5vw);
-    min-width: 32px;
-    min-height: 32px;
-    max-width: 48px;
-    max-height: 48px;
-    margin-bottom: calc(0.125rem + 0.05vw);
+    width: 36px;
+    height: 36px;
+    margin-bottom: 2px;
 }
 
 .custom-captcha-brand {
     display: flex;
     flex-direction: column;
     align-items: center;
-    font-size: calc(0.5rem + 0.125vw);
+    font-size: 8px;
     color: #555;
     font-family: Roboto, arial, sans-serif;
     line-height: 1.2;
@@ -579,12 +624,12 @@ body {
 
 .custom-captcha-brand span {
     font-weight: 500;
-    margin-bottom: calc(0.0625rem + 0.025vw);
+    margin-bottom: 1px;
     letter-spacing: 0.5px;
 }
 
 .custom-privacy-terms {
-    font-size: calc(0.45rem + 0.1vw);
+    font-size: 7px;
     white-space: nowrap;
 }
 
@@ -611,11 +656,6 @@ body {
     animation: spin 1s linear infinite;
     display: inline-block;
     flex-shrink: 0;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
 }
 
 /* Error State Styles */
@@ -813,15 +853,6 @@ body {
         font-size: calc(0.8rem + 0.5vw);
     }
     
-    .custom-checkbox-container {
-        font-size: calc(0.8rem + 0.5vw);
-    }
-    
-    .custom-captcha-box {
-        max-width: 100%;
-        padding: calc(0.875rem + 0.25vw);
-    }
-    
     .stats-section {
         flex-direction: column;
     }
@@ -829,6 +860,13 @@ body {
     .generate-button {
         padding: 0.875rem 1.5rem;
         font-size: 1rem;
+    }
+    
+    /* reCAPTCHA box stays exactly the same size on all screens */
+    .custom-captcha-box {
+        width: 270px;
+        height: 74px;
+        padding: 14px;
     }
 }
 
@@ -857,21 +895,11 @@ body {
         max-width: 100%;
     }
     
+    /* reCAPTCHA box remains completely fixed */
     .custom-captcha-box {
-        flex-direction: column;
-        gap: calc(0.75rem + 0.25vw);
-        align-items: center;
-        text-align: center;
-        min-height: auto;
-        padding: calc(1rem + 0.25vw);
-    }
-    
-    .custom-captcha-main {
-        justify-content: center;
-    }
-    
-    .custom-captcha-logo {
-        padding-left: 0;
+        width: 270px;
+        height: 74px;
+        padding: 14px;
     }
 }
 
@@ -886,5 +914,22 @@ body {
     
     .custom-description {
         font-size: calc(0.7rem + 1vw);
+    }
+    
+    /* Even on 320px screens, reCAPTCHA stays real size */
+    .custom-captcha-box {
+        width: 270px;
+        height: 74px;
+        padding: 14px;
+    }
+    
+    /* Ensure body has minimum width to prevent horizontal scroll */
+    .custom-body {
+        min-width: 320px;
+        padding: calc(1rem + 1vw) 8px;
+    }
+    
+    .custom-container {
+        min-width: 304px;
     }
 }

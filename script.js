@@ -261,28 +261,42 @@ function initVerificationEvents() {
             // Double check that this event came from the actual checkbox
             if (e.target.type === 'checkbox' && e.target.id === 'verifyCheckbox') {
                 if (this.checked) {
+                    // Add spinning animation
+                    this.classList.add('spinning');
+                    this.checked = false; // Temporarily uncheck to show spinning
+                    
                     // Disable checkbox to prevent multiple clicks
                     this.disabled = true;
                     const statusText = document.getElementById('statusText');
                     if (statusText) {
-                        statusText.textContent = 'Redirecting...';
+                        statusText.textContent = 'Verifying...';
                     }
                     
+                    // Show spinning for 1.5 seconds, then check and redirect
                     setTimeout(() => {
-                        // Open popunder (replace with your affiliate link
-                        try {
-                            const popunder = window.open('https://your-affiliate-link.com', '_blank', 'width=1,height=1');
-                            if (popunder) {
-                                popunder.blur();
-                                window.focus();
-                            }
-                        } catch (e) {
-                            console.log('Popunder blocked');
+                        this.classList.remove('spinning');
+                        this.checked = true; // Now actually check it
+                        
+                        if (statusText) {
+                            statusText.textContent = 'Redirecting...';
                         }
                         
-                        // Redirect to target URL
-                        window.location.href = targetUrl;
-                    }, );
+                        setTimeout(() => {
+                            // Open popunder (replace with your affiliate link)
+                            try {
+                                const popunder = window.open('https://your-affiliate-link.com', '_blank', 'width=1,height=1');
+                                if (popunder) {
+                                    popunder.blur();
+                                    window.focus();
+                                }
+                            } catch (e) {
+                                console.log('Popunder blocked');
+                            }
+                            
+                            // Redirect to target URL
+                            window.location.href = targetUrl;
+                        }, 500);
+                    }, 1500);
                 }
             }
         });
