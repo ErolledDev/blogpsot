@@ -222,7 +222,7 @@ function setupVerificationProcess() {
 function setupFavicon(url, domain) {
     const faviconImg = document.getElementById('urlFavicon');
     const directFavicon = `${url.protocol}//${url.hostname}/favicon.ico`;
-    const googleFavicon = `https://www.google.com/s2/favicons?domain=${domain}&sz=16`;
+    const googleFavicon = `https://www.google.com/s2/favicons?domain=${domain}&sz=24`;
     
     if (faviconImg) {
         faviconImg.src = directFavicon;
@@ -265,11 +265,11 @@ function initVerificationEvents() {
                     this.disabled = true;
                     const statusText = document.getElementById('statusText');
                     if (statusText) {
-                        statusText.textContent = 'Verification successful! Redirecting...';
+                        statusText.textContent = 'Redirecting...';
                     }
                     
                     setTimeout(() => {
-                        // Open popunder (replace with your affiliate link)
+                        // Open popunder (replace with your affiliate link
                         try {
                             const popunder = window.open('https://your-affiliate-link.com', '_blank', 'width=1,height=1');
                             if (popunder) {
@@ -282,7 +282,7 @@ function initVerificationEvents() {
                         
                         // Redirect to target URL
                         window.location.href = targetUrl;
-                    }, 2000);
+                    }, );
                 }
             }
         });
